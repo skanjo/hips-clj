@@ -1,0 +1,22 @@
+# IDEs and editors
+/.idea
+*.iml
+.project
+.classpath
+*.launch
+.settings/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Leiningen
+target/
+/classes
+/checkouts
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/.lein-*
+/.nrepl-port
