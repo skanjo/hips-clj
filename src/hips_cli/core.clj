@@ -6,6 +6,8 @@
     [trptcolin.versioneer.core :as version])
   (:gen-class))
 
+(def ^:const person-field-count 5)
+
 (def ^{:added "0.2.0"} cli-spec
   [["-v" "--version" "Version of this application"]
    ["-h" "--help" "Prints this help message"]])
@@ -59,7 +61,11 @@
     (if (.canRead (io/file f))
       (with-open [rdr (io/reader f)]
         (doseq [line (line-seq rdr)]
-          (println (string/split line #"[,| ]"))))
+          (def pv (string/split line #"[,| ]"))
+          (if (= (count pv) person-field-count)
+            (println pv)
+            (println "Invalid delimiter or record layout, ignoring:" (str "'" line "'"))
+            )))
       (println "Cannot read file:" (str "'" f "'"))))
   )
 
