@@ -1,0 +1,10 @@
+Contessa,Daniell,F,Blue,1981-02-24
+Chin,Coard,F,LightBlue,1982-05-12
+Susann,Miland,F,Gray,1982-05-25
+Londa,Tewell,F,Tan,1984-01-05
+Annette,Hallman,F,Bisque,1984-04-30
+Brynn,Lockett,F,CornflowerBlue,1985-01-24
+Hassan,Charest,M,WhiteSmoke,1986-05-09
+Raymond,Grounds,M,Olive,1986-06-25
+Virgilio,Alsop,M,Seashell,1986-10-16
+Crissy,Despain,F,DarkOrange,1987-02-03

@@ -1,0 +1,10 @@
+Elinore|Scoles|F|PaleVioletRed|1989-05-17
+Tom|Mikkelsen|M|MintCream|1990-06-13
+Deandre|Cartagena|M|LightCyan|1991-12-04
+Edmundo|Albarado|M|PaleGoldenrod|1991-12-27
+Renata|Gautreaux|F|Yellow|1993-11-23
+Terrie|Mcmonagle|F|Magenta|1996-02-27
+Sulema|Artiaga|F|Brown|1998-04-28
+Niesha|Daulton|F|DeepSkyBlue|1998-06-05
+Twana|Brodeur|F|AntiqueWhite|1998-11-13
+Jazmin|Ferrier|F|DeepPink|2000-09-27

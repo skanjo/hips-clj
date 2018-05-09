@@ -1,5 +1,6 @@
 (ns hips-cli.core
   (:require
+    [clojure.java.io :as io]
     [clojure.string :as string]
     [clojure.tools.cli :refer [parse-opts]]
     [trptcolin.versioneer.core :as version])
@@ -53,9 +54,13 @@
   (System/exit status)
   )
 
-(defn- ^{:added "0.2.0"} merge-and-sort [arguments]
-  (println "merge-and-sort" (clojure.string/join " " arguments))
-  (System/exit 0)
+(defn- ^{:added "0.2.0"} merge-and-sort [files]
+  (for [f files]
+    (if (.canRead (io/file f))
+      (with-open [rdr (io/reader f)]
+        (doseq [line (line-seq rdr)]
+          (println line)))
+      (println "Cannot read file:" (str "'" f "'"))))
   )
 
 (defn ^{:added "0.1.0"} -main [& args]
