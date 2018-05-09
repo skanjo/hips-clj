@@ -33,24 +33,33 @@
   (let [{:keys [options arguments summary errors]} (parse-opts args cli-spec)]
     (cond
       (:help options)
-      {:command :help :message (cli-help-msg summary)}
+      {:exit-message (cli-help-msg summary) :ok? true}
 
       (:version options)
-      {:command :version :message (cli-version-msg)}
+      {:exit-message (cli-version-msg) :ok? true}
 
       errors
-      {:command :errors :message (cli-error-msg errors)}
+      {:exit-message (cli-error-msg errors)}
+
+      (> (count arguments) 0)
+      {:arguments arguments}
 
       :else
-      {:command :help :message (cli-help-msg summary)}
+      {:exit-message (cli-help-msg summary)}
       )))
 
-(defn ^{:added "0.1.0"} -main [& args]
-  (let [{:keys [command message]} (cli-parse-command args)]
-    (case command
-      :help (println message)
-      :version (println message)
-      :exit message (println message)
-      )
-    ))
+(defn- exit [status msg]
+  (println msg)
+  (System/exit status)
+  )
 
+(defn merge-and-sort [arguments]
+  (println "merge-and-sort" (clojure.string/join " " arguments))
+  (System/exit 0)
+  )
+
+(defn ^{:added "0.1.0"} -main [& args]
+  (let [{:keys [arguments exit-message ok?]} (cli-parse-command args)]
+    (if exit-message
+      (exit (if ok? 0 1) exit-message)
+      (merge-and-sort arguments))))
