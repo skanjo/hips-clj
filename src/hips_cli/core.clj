@@ -59,7 +59,7 @@
     (if (.canRead (io/file f))
       (with-open [rdr (io/reader f)]
         (doseq [line (line-seq rdr)]
-          (println line)))
+          (println (string/split line #"[,| ]"))))
       (println "Cannot read file:" (str "'" f "'"))))
   )
 
