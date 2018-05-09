@@ -1,4 +1,4 @@
-(ns hips-clj.core
+(ns hips-cli.core
   (:require
     [clojure.string :as string]
     [clojure.tools.cli :refer [parse-opts]]
@@ -20,7 +20,7 @@
        (string/join \newline)))
 
 (defn- ^{:added "0.1.0"} cli-version-msg []
-  (str "HipsCli" " " (version/get-version "hips-clj" "hips-clj"))
+  (str "HipsCli" " " (version/get-version "io.xorshift" "hips-cli"))
   )
 
 (defn- ^{:added "0.1.0"} cli-error-msg [errors]

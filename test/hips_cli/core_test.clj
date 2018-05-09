@@ -1,6 +1,6 @@
-(ns hips-clj.core-test
+(ns hips-cli.core-test
   (:require [clojure.test :refer :all]
-            [hips-clj.core :refer :all]))
+            [hips-cli.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
