@@ -56,12 +56,22 @@
   )
 
 (defn- ^{:added "0.2.0"} merge-and-sort [files]
-  (for [f files]
+  (doseq [f files]
     (if (.canRead (io/file f))
       (with-open [rdr (io/reader f)]
         (doseq [line (line-seq rdr)]
-          (person/add-delimited line)))
-      (println "Cannot read file:" (str "'" f "'"))))
+          (person/add line)))
+      (prn "Cannot read file, ignoring:" (str "'" f "'"))))
+
+  (prn "======== SORT BY GENDER ===============================================")
+  (doseq [x (person/sort-by-gender)]
+    (prn x))
+  (prn "======== SORT BY DATE OF BIRTH ========================================")
+  (doseq [x (person/sort-by-date-of-birth)]
+    (prn x))
+  (prn "======== SORT BY LAST NAME ============================================")
+  (doseq [x (person/sort-by-last-name)]
+    (prn x))
   )
 
 (defn ^{:added "0.1.0"} -main [& args]

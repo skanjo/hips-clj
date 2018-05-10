@@ -1,17 +1,21 @@
 (ns hips-cli.person
   (:require
-    [clojure.string :as string]
-    ))
+    [clojure.string :as string]))
 
-(def ^{:added "0.3.0"} people (atom {}))
+(def ^{:added "0.3.0"} people (atom []))
 
-(defn ^{:added "0.3.0"} add-mapped [mapped]
-  (swap! people conj mapped)
-  )
+(defn ^{:added "0.3.0"} add [person]
+  (let [pv (string/split person #"[,| ]")]
+    (if (= (count pv) 5)
+      (let [pm (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv)]
+        (swap! people conj pm))
+      (println "Invalid delimiter or record layout, ignoring:" (str "'" person "'")))))
 
-(defn ^{:added "0.3.0"} add-delimited [delimited]
-  (def pv (string/split delimited #"[,| ]"))
-  (if (= (count pv) 5)
-    (add-mapped (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))
-    (println "Invalid delimiter or record layout, ignoring:" (str "'" delimited "'"))
-    ))
+(defn ^{:added "0.3.0"} sort-by-gender []
+  (sort-by (juxt :gender :last-name) @people))
+
+(defn ^{:added "0.3.0"} sort-by-date-of-birth []
+  (sort-by :date-of-birth @people))
+
+(defn ^{:added "0.3.0"} sort-by-last-name []
+  (sort-by :last-name #(compare %2 %1) @people))
