@@ -6,7 +6,9 @@
     [trptcolin.versioneer.core :as version])
   (:gen-class))
 
-(def ^:const person-field-count 5)
+(def ^:const ^{:added "0.3.0"} person-field-count 5)
+
+(def ^:const ^{:added "0.3.0"} person-field-keys [:first-name :last-name :gender :favorite-color :date-of-birth])
 
 (def ^{:added "0.2.0"} cli-spec
   [["-v" "--version" "Version of this application"]
@@ -63,7 +65,7 @@
         (doseq [line (line-seq rdr)]
           (def pv (string/split line #"[,| ]"))
           (if (= (count pv) person-field-count)
-            (println pv)
+            (prn (zipmap person-field-keys pv))
             (println "Invalid delimiter or record layout, ignoring:" (str "'" line "'"))
             )))
       (println "Cannot read file:" (str "'" f "'"))))
