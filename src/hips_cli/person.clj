@@ -6,8 +6,7 @@
 (def ^{:added "0.3.0"} people (atom {}))
 
 (defn ^{:added "0.3.0"} add-mapped [mapped]
-  ;(swap! people mapped)
-  (prn mapped)
+  (swap! people conj mapped)
   )
 
 (defn ^{:added "0.3.0"} add-delimited [delimited]
@@ -16,4 +15,3 @@
     (add-mapped (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))
     (println "Invalid delimiter or record layout, ignoring:" (str "'" delimited "'"))
     ))
-
