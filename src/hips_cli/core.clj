@@ -1,14 +1,11 @@
 (ns hips-cli.core
   (:require
+    [hips-cli.person :as person]
     [clojure.java.io :as io]
     [clojure.string :as string]
     [clojure.tools.cli :refer [parse-opts]]
     [trptcolin.versioneer.core :as version])
   (:gen-class))
-
-(def ^:const ^{:added "0.3.0"} person-field-count 5)
-
-(def ^:const ^{:added "0.3.0"} person-field-keys [:first-name :last-name :gender :favorite-color :date-of-birth])
 
 (def ^{:added "0.2.0"} cli-spec
   [["-v" "--version" "Version of this application"]
@@ -63,11 +60,7 @@
     (if (.canRead (io/file f))
       (with-open [rdr (io/reader f)]
         (doseq [line (line-seq rdr)]
-          (def pv (string/split line #"[,| ]"))
-          (if (= (count pv) person-field-count)
-            (prn (zipmap person-field-keys pv))
-            (println "Invalid delimiter or record layout, ignoring:" (str "'" line "'"))
-            )))
+          (person/add-delimited line)))
       (println "Cannot read file:" (str "'" f "'"))))
   )
 
