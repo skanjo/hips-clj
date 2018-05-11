@@ -63,16 +63,17 @@
           (person/add line)))
       (prn "Cannot read file, ignoring:" (str "'" f "'"))))
 
-  (println "======== SORT BY GENDER ===============================================")
+  (println "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING")
   (doseq [p (person/sort-by-gender)]
     (print (person/to-csv p)))
-  (println "======== SORT BY DATE OF BIRTH ========================================")
+  (println)
+  (println "OUTPUT 2 - SORTED BY BIRTH DATE ASCENDING")
   (doseq [p (person/sort-by-date-of-birth)]
     (print (person/to-csv p)))
-  (println "======== SORT BY LAST NAME ============================================")
+  (println)
+  (println "OUTPUT 3 - SORTED BY LAST NAME DESCENDING")
   (doseq [p (person/sort-by-last-name)]
-    (print (person/to-csv p)))
-  )
+    (print (person/to-csv p))))
 
 (defn ^{:added "0.1.0"} -main [& args]
   (let [{:keys [arguments exit-message ok?]} (cli-parse-command args)]
