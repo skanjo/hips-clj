@@ -22,7 +22,7 @@
         ""]
        (string/join \newline)))
 
-(defn- cli-version-msg
+(defn cli-version-msg
   []
   (str "HipsCli" " " (version/get-version "io.xorshift" "hips-cli"))
   )

@@ -11,7 +11,7 @@
 (def
   out-date-format (java.text.SimpleDateFormat. "M/dd/yyyy"))
 
-(defn- parse-date
+(defn parse-date
   [dt]
   (.parse in-date-format dt))
 
