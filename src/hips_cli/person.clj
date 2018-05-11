@@ -4,16 +4,18 @@
 
 (def ^{:added "0.3.0"} people (atom []))
 
-(defn- ^{:added "0.3.0"} parse-date [dt]
-  (.parse (java.text.SimpleDateFormat. "yyyy-MM-dd") dt))
+(def ^{:added "0.3.0"} in-date-format (java.text.SimpleDateFormat. "yyyy-MM-dd"))
 
-(defn- ^{:added "0.3.0"} transform-record [rec]
+(defn- ^{:added "0.3.0"} parse-date [dt]
+  (.parse in-date-format dt))
+
+(defn- ^{:added "0.3.0"} normalize-record [rec]
   (update rec :date-of-birth parse-date))
 
 (defn ^{:added "0.3.0"} add [person]
   (let [pv (string/split person #"[,| ]")]
     (if (= (count pv) 5)
-      (let [pm (transform-record (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))]
+      (let [pm (normalize-record (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))]
         (swap! people conj pm))
       (println "Invalid delimiter or record layout, ignoring:" (str "'" person "'")))))
 
