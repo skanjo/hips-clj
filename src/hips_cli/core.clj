@@ -8,12 +8,10 @@
   (:gen-class))
 
 (def
-  ^{:added "0.2.0"}
   cli-spec [["-v" "--version" "Version of this application"]
             ["-h" "--help" "Prints this help message"]])
 
 (defn- cli-help-msg
-  {:added "0.2.0"}
   [summary]
   (->> ["HipsCli merges and sorts one or more files containing person records for profit!"
         ""
@@ -25,13 +23,11 @@
        (string/join \newline)))
 
 (defn- cli-version-msg
-  {:added "0.2.0"}
   []
   (str "HipsCli" " " (version/get-version "io.xorshift" "hips-cli"))
   )
 
 (defn- cli-error-msg
-  {:added "0.2.0"}
   [errors]
   (->> ["The following errors occurred while parsing your command:"
         ""
@@ -39,7 +35,6 @@
        (string/join \newline)))
 
 (defn- cli-parse-command
-  {:added "0.2.0"}
   [args]
   (let [{:keys [options arguments summary errors]} (parse-opts args cli-spec)]
     (cond
@@ -60,14 +55,12 @@
       )))
 
 (defn- exit
-  {:added "0.2.0"}
   [status msg]
   (println msg)
   (System/exit status)
   )
 
 (defn- merge-and-sort
-  {:added "0.2.0"}
   [files]
   (doseq [f files]
     (if (.canRead (io/file f))
@@ -89,7 +82,6 @@
     (print (person/to-csv p))))
 
 (defn -main
-  {:added "0.1.0"}
   [& args]
   (let [{:keys [arguments exit-message ok?]} (cli-parse-command args)]
     (if exit-message
