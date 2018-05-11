@@ -37,15 +37,15 @@
 
 (defn sort-by-gender
   [peeps]
-  (sort-by (juxt :gender :last-name) peeps))
+  (sort-by (juxt :gender :last-name) @peeps))
 
 (defn sort-by-date-of-birth
   [peeps]
-  (sort-by :date-of-birth peeps))
+  (sort-by :date-of-birth @peeps))
 
 (defn sort-by-last-name
   [peeps]
-  (sort-by :last-name #(compare %2 %1) peeps))
+  (sort-by :last-name #(compare %2 %1) @peeps))
 
 (defn to-csv
   [pm]
