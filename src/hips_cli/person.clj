@@ -28,24 +28,24 @@
   (update rec :date-of-birth format-date))
 
 (defn add
-  [person]
+  [person peeps]
   (let [pv (string/split person #"[,| ]")]
     (if (= (count pv) 5)
       (let [pm (intern-record (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))]
-        (swap! people conj pm))
+        (swap! peeps conj pm))
       (println "Invalid delimiter or record layout, ignoring:" (str "'" person "'")))))
 
 (defn sort-by-gender
-  []
-  (sort-by (juxt :gender :last-name) @people))
+  [peeps]
+  (sort-by (juxt :gender :last-name) peeps))
 
 (defn sort-by-date-of-birth
-  []
-  (sort-by :date-of-birth @people))
+  [peeps]
+  (sort-by :date-of-birth peeps))
 
 (defn sort-by-last-name
-  []
-  (sort-by :last-name #(compare %2 %1) @people))
+  [peeps]
+  (sort-by :last-name #(compare %2 %1) peeps))
 
 (defn to-csv
   [pm]
