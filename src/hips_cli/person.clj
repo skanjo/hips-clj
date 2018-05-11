@@ -6,16 +6,24 @@
 
 (def ^{:added "0.3.0"} in-date-format (java.text.SimpleDateFormat. "yyyy-MM-dd"))
 
+(def ^{:added "0.4.0"} out-date-format (java.text.SimpleDateFormat. "M/dd/yyyy"))
+
 (defn- ^{:added "0.3.0"} parse-date [dt]
   (.parse in-date-format dt))
 
-(defn- ^{:added "0.3.0"} normalize-record [rec]
+(defn- ^{:added "0.4.0"} format-date [dt]
+  (.format out-date-format dt))
+
+(defn- ^{:added "0.3.0"} intern-record [rec]
   (update rec :date-of-birth parse-date))
+
+(defn- ^{:added "0.4.0"} extern-record [rec]
+  (update rec :date-of-birth format-date))
 
 (defn ^{:added "0.3.0"} add [person]
   (let [pv (string/split person #"[,| ]")]
     (if (= (count pv) 5)
-      (let [pm (normalize-record (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))]
+      (let [pm (intern-record (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))]
         (swap! people conj pm))
       (println "Invalid delimiter or record layout, ignoring:" (str "'" person "'")))))
 
@@ -29,4 +37,4 @@
   (sort-by :last-name #(compare %2 %1) @people))
 
 (defn ^{:added "0.4.0"} to-csv [pm]
-  (str (string/join "," (vals pm)) \newline))
+  (str (string/join "," (vals (extern-record pm))) \newline))
