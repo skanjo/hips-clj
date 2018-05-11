@@ -64,14 +64,14 @@
       (prn "Cannot read file, ignoring:" (str "'" f "'"))))
 
   (prn "======== SORT BY GENDER ===============================================")
-  (doseq [x (person/sort-by-gender)]
-    (prn x))
+  (doseq [p (person/sort-by-gender)]
+    (prn (person/to-csv p)))
   (prn "======== SORT BY DATE OF BIRTH ========================================")
-  (doseq [x (person/sort-by-date-of-birth)]
-    (prn x))
+  (doseq [p (person/sort-by-date-of-birth)]
+    (prn (person/to-csv p)))
   (prn "======== SORT BY LAST NAME ============================================")
-  (doseq [x (person/sort-by-last-name)]
-    (prn x))
+  (doseq [p (person/sort-by-last-name)]
+    (prn (person/to-csv p)))
   )
 
 (defn ^{:added "0.1.0"} -main [& args]

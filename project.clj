@@ -1,4 +1,4 @@
-(defproject io.xorshift/hips-cli "0.3.0-SNAPSHOT"
+(defproject io.xorshift/hips-cli "0.4.0-SNAPSHOT"
   :description "Merge and sort records"
   :url "https://github.com/skanjo/hips-clj"
   :dependencies [[org.clojure/clojure "1.9.0"]

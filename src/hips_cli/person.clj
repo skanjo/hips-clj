@@ -27,3 +27,6 @@
 
 (defn ^{:added "0.3.0"} sort-by-last-name []
   (sort-by :last-name #(compare %2 %1) @people))
+
+(defn ^{:added "0.4.0"} to-csv [pm]
+  (str (string/join "," (vals pm)) \newline))
