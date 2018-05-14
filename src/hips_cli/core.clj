@@ -71,15 +71,15 @@
 
   (println "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING")
   (doseq [p (person/sort-by-gender person/people)]
-    (print (person/to-csv p)))
+    (print (str (person/to-csv p) \newline)))
   (println)
   (println "OUTPUT 2 - SORTED BY BIRTH DATE ASCENDING")
   (doseq [p (person/sort-by-date-of-birth person/people)]
-    (print (person/to-csv p)))
+    (print (str (person/to-csv p) \newline)))
   (println)
   (println "OUTPUT 3 - SORTED BY LAST NAME DESCENDING")
   (doseq [p (person/sort-by-last-name person/people)]
-    (print (person/to-csv p))))
+    (print (str (person/to-csv p) \newline))))
 
 (defn -main
   [& args]

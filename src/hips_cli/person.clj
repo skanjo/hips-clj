@@ -49,4 +49,4 @@
 
 (defn to-csv
   [pm]
-  (str (string/join "," (vals (extern-record pm))) \newline))
+  (string/join "," (vals (extern-record pm))))
