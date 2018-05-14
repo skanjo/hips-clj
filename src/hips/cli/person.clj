@@ -3,9 +3,6 @@
     [clojure.string :as string]))
 
 (def
-  people (atom []))
-
-(def
   in-date-format (java.text.SimpleDateFormat. "yyyy-MM-dd"))
 
 (def
@@ -19,34 +16,40 @@
   [dt]
   (.format out-date-format dt))
 
-(defn- intern-record
-  [rec]
-  (update rec :date-of-birth parse-date))
+(def field-mapping
+  (array-map
+    :first-name identity
+    :last-name identity
+    :gender identity
+    :favorite-color identity
+    :date-of-birth #(parse-date %)))
 
-(defn- extern-record
-  [rec]
-  (update rec :date-of-birth format-date))
+(defn translate-field-values [m]
+  (into {}
+        (for [[field parser] field-mapping]
+          [field (parser (get m field))])))
 
-(defn add
-  [person peeps]
-  (let [pv (string/split person #"[,| ]")]
-    (if (= (count pv) 5)
-      (let [pm (intern-record (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] pv))]
-        (swap! peeps conj pm))
-      (println "Invalid delimiter or record layout, ignoring:" (str "'" person "'")))))
+(defn csv-to-map
+  [csv]
+  (zipmap [:first-name :last-name :gender :favorite-color :date-of-birth] (string/split csv #"[,| ]")))
+
+(defn from-csv
+  [csv]
+  (translate-field-values (csv-to-map csv)))
 
 (defn sort-by-gender
-  [peeps]
-  (sort-by (juxt :gender :last-name) @peeps))
+  [v]
+  (sort-by (juxt :gender :last-name) v))
 
 (defn sort-by-date-of-birth
-  [peeps]
-  (sort-by :date-of-birth @peeps))
+  [v]
+  (sort-by :date-of-birth v))
 
 (defn sort-by-last-name
-  [peeps]
-  (sort-by :last-name #(compare %2 %1) @peeps))
+  [v]
+  (sort-by :last-name #(compare %2 %1) v))
 
 (defn to-csv
   [pm]
-  (string/join "," (vals (extern-record pm))))
+  (string/join "," (vals (update pm :date-of-birth format-date))))
+

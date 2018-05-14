@@ -11,7 +11,7 @@
   cli-spec [["-v" "--version" "Version of this application"]
             ["-h" "--help" "Prints this help message"]])
 
-(defn- cli-help-msg
+(defn cli-help-msg
   [summary]
   (->> ["HipsCli merges and sorts one or more files containing person records for profit!"
         ""
@@ -24,8 +24,8 @@
 
 (defn cli-version-msg
   []
-  (str "HipsCli" " " (version/get-version "io.xorshift" "hips-cli"))
-  )
+  (str "HipsCli" " " (version/get-version "io.xorshift" "hips-cli")))
+
 
 (defn- cli-error-msg
   [errors]
@@ -34,7 +34,7 @@
         (string/join \newline errors)]
        (string/join \newline)))
 
-(defn- cli-parse-command
+(defn cli-parse-command
   [args]
   (let [{:keys [options arguments summary errors]} (parse-opts args cli-spec)]
     (cond
@@ -51,35 +51,47 @@
       {:arguments arguments}
 
       :else
-      {:exit-message (cli-help-msg summary)}
-      )))
+      {:exit-message (cli-help-msg summary)})))
 
-(defn- exit
+(defn exit
   [status msg]
   (println msg)
-  (System/exit status)
-  )
+  (System/exit status))
 
-(defn- merge-and-sort
-  [files]
+(defn read-files
+  [files ppl]
   (doseq [f files]
     (if (.canRead (io/file f))
       (with-open [rdr (io/reader f)]
         (doseq [line (line-seq rdr)]
-          (person/add line person/people)))
-      (prn "Cannot read file, ignoring:" (str "'" f "'"))))
+          ;(person/add line person/people)
+          ;(swap! person/people conj (person/from-csv line))
+          (swap! ppl conj (person/from-csv line))))
+      ;(println (person/from-csv line))))
 
+      (prn "Cannot read file, ignoring:" (str "'" f "'")))))
+
+(defn write-sorted-lists
+  [ppl]
   (println "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING")
-  (doseq [p (person/sort-by-gender person/people)]
+  (doseq [p (person/sort-by-gender @ppl)]
     (print (str (person/to-csv p) \newline)))
   (println)
+
   (println "OUTPUT 2 - SORTED BY BIRTH DATE ASCENDING")
-  (doseq [p (person/sort-by-date-of-birth person/people)]
+  (doseq [p (person/sort-by-date-of-birth @ppl)]
     (print (str (person/to-csv p) \newline)))
   (println)
+
   (println "OUTPUT 3 - SORTED BY LAST NAME DESCENDING")
-  (doseq [p (person/sort-by-last-name person/people)]
+  (doseq [p (person/sort-by-last-name @ppl)]
     (print (str (person/to-csv p) \newline))))
+
+(defn merge-and-sort
+  [files]
+  (let [ppl (atom [])]
+    (read-files files ppl)
+    (write-sorted-lists ppl)))
 
 (defn -main
   [& args]

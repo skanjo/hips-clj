@@ -41,21 +41,6 @@
 (def courtney-hansen-space
   "Courtney Hansen F Blue 2005-03-17")
 
-(deftest add-test
-  (testing "add delimited person record to collection of people"
-    (testing "add comma delimited person"
-      (let [ppl (atom [])]
-        (add chip-foose-comma ppl)
-        (is (= [chip-foose-map] @ppl))))
-    (testing "add pipe delimited person"
-      (let [ppl (atom [])]
-        (add chip-foose-pipe ppl)
-        (is (= [chip-foose-map] @ppl))))
-    (testing "add space delimited person"
-      (let [ppl (atom [])]
-        (add chip-foose-space ppl)
-        (is (= [chip-foose-map] @ppl))))))
-
 (deftest sort-by-gender-test
   (testing "sort collection of people by gender and then last name in ascending order"
     ; setup
@@ -64,7 +49,7 @@
       (swap! ppl conj courtney-hansen-map)
       (swap! ppl conj chip-foose-map)
       ; execute and verify
-      (is (= [courtney-hansen-map chip-foose-map chris-jacobs-map] (sort-by-gender ppl))))))
+      (is (= [courtney-hansen-map chip-foose-map chris-jacobs-map] (sort-by-gender @ppl))))))
 
 (deftest sort-by-date-of-birth-test
   (testing "sort collection of people by date of birth in ascending order"
@@ -74,7 +59,7 @@
       (swap! ppl conj chip-foose-map)
       (swap! ppl conj courtney-hansen-map)
       ; execute and verify
-      (is (= [chip-foose-map courtney-hansen-map chris-jacobs-map] (sort-by-date-of-birth ppl))))))
+      (is (= [chip-foose-map courtney-hansen-map chris-jacobs-map] (sort-by-date-of-birth @ppl))))))
 
 (deftest sort-by-last-name-test
   (testing "sort collection of people by last name descending order"
@@ -84,7 +69,7 @@
       (swap! ppl conj chris-jacobs-map)
       (swap! ppl conj courtney-hansen-map)
       ; execute and verify
-      (is (= [chris-jacobs-map courtney-hansen-map chip-foose-map] (sort-by-last-name ppl))))))
+      (is (= [chris-jacobs-map courtney-hansen-map chip-foose-map] (sort-by-last-name @ppl))))))
 
 (deftest to-csv-test
   (testing "write person map as csv string"
