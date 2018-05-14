@@ -64,34 +64,27 @@
     (if (.canRead (io/file f))
       (with-open [rdr (io/reader f)]
         (doseq [line (line-seq rdr)]
-          ;(person/add line person/people)
-          ;(swap! person/people conj (person/from-csv line))
           (swap! ppl conj (person/from-csv line))))
-      ;(println (person/from-csv line))))
-
       (prn "Cannot read file, ignoring:" (str "'" f "'")))))
 
-(defn write-sorted-lists
+(defn write-sorted-list [caption seq]
+  (println caption)
+  (doseq [p seq]
+    (print (str (person/to-csv p) \newline)))
+  (println)
+  )
+
+(defn write-sorts
   [ppl]
-  (println "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING")
-  (doseq [p (person/sort-by-gender @ppl)]
-    (print (str (person/to-csv p) \newline)))
-  (println)
-
-  (println "OUTPUT 2 - SORTED BY BIRTH DATE ASCENDING")
-  (doseq [p (person/sort-by-date-of-birth @ppl)]
-    (print (str (person/to-csv p) \newline)))
-  (println)
-
-  (println "OUTPUT 3 - SORTED BY LAST NAME DESCENDING")
-  (doseq [p (person/sort-by-last-name @ppl)]
-    (print (str (person/to-csv p) \newline))))
+  (write-sorted-list "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING" (person/sort-by-gender @ppl))
+  (write-sorted-list "OUTPUT 2 - SORTED BY BIRTH DATE ASCENDING" (person/sort-by-date-of-birth @ppl))
+  (write-sorted-list "OUTPUT 3 - SORTED BY LAST NAME DESCENDING" (person/sort-by-last-name @ppl)))
 
 (defn merge-and-sort
   [files]
   (let [ppl (atom [])]
     (read-files files ppl)
-    (write-sorted-lists ppl)))
+    (write-sorts ppl)))
 
 (defn -main
   [& args]
