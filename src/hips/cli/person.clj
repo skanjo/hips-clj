@@ -1,4 +1,4 @@
-(ns hips-cli.person
+(ns hips.cli.person
   (:require
     [clojure.string :as string]))
 

@@ -1,6 +1,6 @@
-(ns hips-cli.core
+(ns hips.cli.core
   (:require
-    [hips-cli.person :as person]
+    [hips.cli.person :as person]
     [clojure.java.io :as io]
     [clojure.string :as string]
     [clojure.tools.cli :refer [parse-opts]]

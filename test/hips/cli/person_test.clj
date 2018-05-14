@@ -1,6 +1,6 @@
-(ns hips-cli.person-test
+(ns hips.cli.person-test
   (:require [clojure.test :refer :all]
-            [hips-cli.person :refer :all]))
+            [hips.cli.person :refer :all]))
 
 (def chip-foose-map
   {:first-name "Chip" :last-name "Foose" :gender "M" :favorite-color "MetallicOrange" :date-of-birth (parse-date "2004-10-12")})

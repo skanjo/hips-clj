@@ -1,6 +1,6 @@
-(ns hips-cli.core-test
+(ns hips.cli.core-test
   (:require [clojure.test :refer :all]
-            [hips-cli.core :refer :all]
+            [hips.cli.core :refer :all]
             [trptcolin.versioneer.core :as version]))
 
 (deftest cli-version-msg-test
