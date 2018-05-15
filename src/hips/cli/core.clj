@@ -7,45 +7,47 @@
     [trptcolin.versioneer.core :as version])
   (:gen-class))
 
-(def
-  ^{:doc "Specification to define the command line options available."}
-  cli-spec [["-v" "--version" "Version of this application"]
-            ["-h" "--help" "Prints this help message"]])
+(def cli-spec
+  "Specification to define the command line options available."
+  [["-v" "--version" "Version of this application"]
+   ["-h" "--help" "Prints this help message"]])
 
 (defn cli-help-msg
-  "Render help message to write to command line. Accepts a string containing the available command line options and
-  returning a string with complete help message."
+  "Render help message to write to command line. Accepts a string containing
+  the available command line options and returning a string with complete help
+  message."
   [summary]
-  (->> ["HipsCli merges and sorts one or more files containing person records for profit!"
-        ""
-        "Usage: HipsCli [options] [file ...]"
-        ""
-        "Options:"
-        summary
-        ""]
-       (string/join \newline)))
+  (string/join \newline
+               ["HipsCli merges and sorts one or more files containing person records for profit!"
+                ""
+                "Usage: HipsCli [options] [file ...]"
+                ""
+                "Options:"
+                summary
+                ""]))
 
 (defn cli-version-msg
   "Render version message. This works from both the command line running jar and in REPL."
   []
-  (str "HipsCli" " " (version/get-version "io.xorshift" "hips-cli")))
+  (str "HipsCli " (version/get-version "io.xorshift" "hips-cli")))
 
 
 (defn- cli-error-msg
-  "Render an error message to write to the command line. Accepts a vector of error message strings and returning a
-  string."
+  "Render an error message to write to the command line. Accepts a vector of
+  error message strings and returning a string."
   [errors]
-  (->> ["The following errors occurred while parsing your command:"
-        ""
-        (string/join \newline errors)]
-       (string/join \newline)))
+  (str "The following errors occurred while parsing your command:\n"
+       (string/join \newline errors)))
 
 (defn cli-parse-command
-  "Parse command line arguments. Accepts vector of arguments received from the command line and returns a map
-  containing: arguments exit-message, and ok?. The value for arguments contains the set of files to read. The value for
-  exit-message contains one of help message, version message, or an error message due to command line parse errors. The
-  value for ok? is used with exit-message to indicate if the exit is requested as result oof an error or not. When
-  displaying help or version message this value is true otherwise it is false."
+  "Parse command line arguments. Accepts vector of arguments received from the
+  command line and returns a map containing: arguments exit-message, and ok?.
+  The value for arguments contains the set of files to read. The value for
+  exit-message contains one of help message, version message, or an error
+  message due to command line parse errors. The value for ok? is used with
+  exit-message to indicate if the exit is requested as result oof an error or
+  not. When displaying help or version message this value is true otherwise it
+  is false."
   [args]
   (let [{:keys [options arguments summary errors]} (parse-opts args cli-spec)]
     (cond
@@ -55,10 +57,10 @@
       (:version options)
       {:exit-message (cli-version-msg) :ok? true}
 
-      errors
+      (not-empty errors)
       {:exit-message (cli-error-msg errors)}
 
-      (> (count arguments) 0)
+      (not-empty arguments)
       {:arguments arguments}
 
       :else
@@ -71,40 +73,47 @@
   (println msg)
   (System/exit status))
 
+(defn map-file-lines [f file]
+  (with-open [rdr (io/reader file)]
+    (mapv f (line-seq rdr))))
+
+(comment
+  (map-file-lines #(apply str (reverse %)) (io/resource "records_comma_10.txt")))
+
 (defn read-files
-  "Read one or more files of person records, convert each record to a person map, and add to ppl atom. If any of the
-  specified files is not readable an warning message is written to stdout and the process continues until there are no
-  files to read."
-  [files ppl]
-  (doseq [f files]
-    (if (.canRead (io/file f))
-      (with-open [rdr (io/reader f)]
-        (doseq [line (line-seq rdr)]
-          (swap! ppl conj (person/from-csv line))))
-      (prn "Cannot read file, ignoring:" (str "'" f "'")))))
+  "Read one or more files of person records, convert each record to a person
+  map, and add to ppl atom. If any of the specified files is not readable an
+  warning message is written to stdout and the process continues until there
+  are no files to read."
+  [files]
+  (mapcat #(map-file-lines person/from-csv %) files))
+
+(comment
+  (read-files [(io/resource "records_comma_10.txt")
+               (io/resource "records_pipe_10.txt")]))
 
 (defn write-sorted-list [caption seq]
   "Write the result of a sort contained in seq along with caption to stdout."
   (println caption)
   (doseq [p seq]
     (print (str (person/to-csv p) \newline)))
-  (println)
-  )
+  (println))
 
 (defn write-sorts
   "Sort and write person records contained in an atom. The atom is expected to contain a vector of person maps."
   [ppl]
-  (write-sorted-list "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING" (person/sort-by-gender @ppl))
-  (write-sorted-list "OUTPUT 2 - SORTED BY BIRTH DATE ASCENDING" (person/sort-by-date-of-birth @ppl))
-  (write-sorted-list "OUTPUT 3 - SORTED BY LAST NAME DESCENDING" (person/sort-by-last-name @ppl)))
+  (write-sorted-list "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING"
+                     (person/sort-by-gender ppl))
+  (write-sorted-list "OUTPUT 2 - SORTED BY BIRTH DATE ASCENDING"
+                     (person/sort-by-date-of-birth ppl))
+  (write-sorted-list "OUTPUT 3 - SORTED BY LAST NAME DESCENDING"
+                     (person/sort-by-last-name ppl)))
 
 (defn merge-and-sort
   "Command that implements reading, merging, sorting, and outputing sorted results. Excepts a vector of one or more
   file paths to files contain person records."
   [files]
-  (let [ppl (atom [])]
-    (read-files files ppl)
-    (write-sorts ppl)))
+  (write-sorts (read-files files)))
 
 (defn -main
   "Merge one or more files containing person records and output the result of three sorts: by gender and last name in
