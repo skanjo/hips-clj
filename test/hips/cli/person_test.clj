@@ -23,23 +23,14 @@
 (def chip-foose-space
   "Chip Foose M MetallicOrange 2004-10-12")
 
-(def chris-jacobs-comma
-  "Chris,Jacobs,M,Black,2008-06-26")
-
-(def chris-jacobs-pipe
-  "Chris|Jacobs|M|Black|2008-06-26")
-
-(def chris-jacobs-space
-  "Chris Jacobs M Black 2008-06-26")
-
-(def courtney-hansen-comma
-  "Courtney,Hansen,F,Blue,2005-03-17")
-
-(def courtney-hansen-pipe
-  "Courtney|Hansen|F|Blue|2005-03-17")
-
-(def courtney-hansen-space
-  "Courtney Hansen F Blue 2005-03-17")
+(deftest from-csv-test
+  (testing "convert delimited person record to map"
+    (testing "convert comma delimited"
+      (is (= chip-foose-map (from-csv chip-foose-comma))))
+    (testing "convert pipe delimited"
+      (is (= chip-foose-map (from-csv chip-foose-pipe))))
+    (testing "convert space delimited"
+      (is (= chip-foose-map (from-csv chip-foose-space))))))
 
 (deftest sort-by-gender-test
   (testing "sort collection of people by gender and then last name in ascending order"
