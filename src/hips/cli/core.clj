@@ -27,7 +27,8 @@
                 ""]))
 
 (defn cli-version-msg
-  "Render version message. This works from both the command line running jar and in REPL."
+  "Render version message. This works from both the command line running jar
+   and in REPL."
   []
   (str "HipsCli " (version/get-version "io.xorshift" "hips-cli")))
 
@@ -67,8 +68,8 @@
       {:exit-message (cli-help-msg summary)})))
 
 (defn exit
-  "Exit application with message msg and exit code status. Primary use is for help and version messages and command
-  line parsing errors."
+  "Exit application with message msg and exit code status. Primary use is for
+  help and version messages and command line parsing errors."
   [msg status]
   (println msg)
   (System/exit status))
@@ -82,9 +83,7 @@
 
 (defn read-files
   "Read one or more files of person records, convert each record to a person
-  map, and add to ppl atom. If any of the specified files is not readable an
-  warning message is written to stdout and the process continues until there
-  are no files to read."
+  map, and return the collection of all person records."
   [files]
   (mapcat #(map-file-lines person/from-csv %) files))
 
@@ -100,7 +99,10 @@
   (println))
 
 (defn write-sorts
-  "Sort and write person records contained in an atom. The atom is expected to contain a vector of person maps."
+  "Sort and write person records. Excepts vector of person maps. Write the
+   following sorts: sorted by gender and last name in ascending order, sorts by
+   date of birth in ascending order, sorts by last name in descending order.
+  "
   [ppl]
   (write-sorted-list "OUTPUT 1 - SORTED BY GENDER AND THEN BY LAST NAME ASCENDING"
                      (person/sort-by-gender ppl))
@@ -110,19 +112,24 @@
                      (person/sort-by-last-name ppl)))
 
 (defn merge-and-sort
-  "Command that implements reading, merging, sorting, and outputing sorted results. Excepts a vector of one or more
-  file paths to files contain person records."
+  "Command that implements reading, merging, sorting, and writing person
+  records. Excepts a vector of one or more file paths to files contain person
+  records."
   [files]
   (write-sorts (read-files files)))
 
 (defn -main
-  "Merge one or more files containing person records and output the result of three sorts: by gender and last name in
-  ascending order, by date of birth in ascending order, and last name in descending order. There are two options
-  available: --help which displays a help message and --version which displays a version message.
+  "Merge one or more files containing person records and output the result of
+  three sorts: by gender and last name in ascending order, by date of birth in
+  ascending order, and last name in descending order. There are two options
+  available: --help which displays a help message and --version which displays
+  a version message.
 
-  Files may be delimited using comma, pipe, or space. The field values may not contain the delimiter used. The field
-  values should not be quoted. The following fields in order are required for each record in the file: first-name,
-  last-name, gender, favorite-color, date-of-birth. The date-of-birth field is expected to have the format yyyy-MM-dd."
+  Files may be delimited using comma, pipe, or space. The field values may not
+  contain the delimiter used. The field values should not be quoted. The
+  following fields in order are required for each record in the file:
+  first-name, last-name, gender, favorite-color, date-of-birth. The
+  date-of-birth field is expected to have the format yyyy-MM-dd."
   [& args]
   (let [{:keys [arguments exit-message ok?]} (cli-parse-command args)]
     (if exit-message
