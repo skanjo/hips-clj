@@ -1,10 +1,15 @@
-(defproject io.xorshift/hips-cli "0.5.0-SNAPSHOT"
+(defproject io.xorshift/hips-clj-parent "0.6.0-SNAPSHOT"
+
   :description "Merge and sort records"
+
   :url "https://github.com/skanjo/hips-clj"
-  :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/tools.cli "0.3.7"]
-                 [trptcolin/versioneer "0.2.0"]]
-  :main ^:skip-aot hips.cli.core
-  :target-path "target/%s"
+
+  :min-lein-version "2.0.0"
+
+  :plugins [[lein-modules "0.3.11"]
+            [lein-pprint "1.2.0"]]
+
   :profiles {:uberjar {:aot :all}}
-  :plugins [])
+
+  :modules {:subprocess nil}
+  )

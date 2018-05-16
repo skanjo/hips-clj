@@ -30,7 +30,7 @@
   "Render version message. This works from both the command line running jar
    and in REPL."
   []
-  (str "HipsCli " (version/get-version "io.xorshift" "hips-cli")))
+  (str "HipsCli " (version/get-version "io.xorshift" "hips-clj-cli")))
 
 
 (defn- cli-error-msg
