@@ -1,17 +1,16 @@
 (defproject io.xorshift/hips-clj-cli "0.6.0-SNAPSHOT"
 
-  :description "Merge and sort records"
+  :description "CLI application that reads one or more files and prints three sorted lists"
 
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[io.xorshift/hips-clj-people :version]
+                 [org.clojure/clojure "1.9.0"]
                  [org.clojure/tools.cli "0.3.7"]
                  [trptcolin/versioneer "0.2.0"]]
 
-  :plugins [[lein-pprint "1.2.0"]]
+  :plugins [[lein-modules "0.3.11"]]
 
   :profiles {:uberjar {:aot :all}}
 
-  :main ^:skip-aot hips.cli.core
-
-  :target-path "target/%s"
+  :main hips.cli.core
 
   )
