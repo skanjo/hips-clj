@@ -1,4 +1,4 @@
-(defproject io.xorshift/hips-clj-people "0.6.0-SNAPSHOT"
+(defproject io.xorshift/hips-clj-people "0.7.0-SNAPSHOT"
 
   :description "Library for managing person records"
 

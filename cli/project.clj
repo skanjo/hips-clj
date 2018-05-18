@@ -1,4 +1,4 @@
-(defproject io.xorshift/hips-clj-cli "0.6.0-SNAPSHOT"
+(defproject io.xorshift/hips-clj-cli "0.7.0-SNAPSHOT"
 
   :description "CLI application that reads one or more files and prints three sorted lists"
 

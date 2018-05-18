@@ -1,4 +1,4 @@
-(defproject io.xorshift/hips-clj-parent "0.6.0-SNAPSHOT"
+(defproject io.xorshift/hips-clj-parent "0.7.0-SNAPSHOT"
 
   :description "Merge and sort records for profit"
 
