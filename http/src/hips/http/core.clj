@@ -35,14 +35,3 @@
   []
   (str "sort by last name" \newline))
 
-(defroutes app-routes
-           (GET "/version" [] (app-version))
-           (GET "/health" [] (health-check))
-           (POST "/records" {body :body} (add-person (slurp body)))
-           (GET "/records/gender" [] (sort-by-gender))
-           (GET "/records/birthdate" [] (sort-by-date-of-birth))
-           (GET "/records/name" [] (sort-by-last-name))
-           (route/not-found "Not Found"))
-
-(def app
-  (wrap-defaults app-routes {}))
