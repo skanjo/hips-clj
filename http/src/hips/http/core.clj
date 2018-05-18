@@ -1,12 +1,16 @@
 (ns hips.http.core
-  (:require [ring.adapter.jetty :as jetty])
+  (:require [ring.adapter.jetty :as jetty]
+            [ring.middleware.reload :refer [wrap-reload]])
   (:gen-class))
 
 (defn handler [request]
   {:status  200
    :headers {"content-type" "text/html"}
-   :body    "Hips HTTP Sample Project"})
+   :body    (str "Hips HTTP Sample Project - foo" \newline)})
+
+(def reloadable-handler
+  (wrap-reload #'handler))
 
 (defn -main
   [& args]
-  (jetty/run-jetty handler {:port 3000}))
+  (jetty/run-jetty reloadable-handler {:port 3000}))
