@@ -7,7 +7,8 @@
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]
                  [ring/ring-devel "1.6.3"]
-                 [cheshire "5.8.0"]]
+                 [cheshire "5.8.0"]
+                 [trptcolin/versioneer "0.2.0"]]
 
   :plugins [[lein-modules "0.3.11"]]
 

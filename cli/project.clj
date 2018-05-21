@@ -11,6 +11,4 @@
 
   :profiles {:uberjar {:aot :all}}
 
-  :main hips.cli.core
-
-  )
+  :main hips.cli.core)

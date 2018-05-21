@@ -2,7 +2,9 @@
   (:require [hips.cli.person :as person]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
-            [cheshire.core :as json])
+            [cheshire.core :as json]
+            [trptcolin.versioneer.core :as version])
+
   (:gen-class))
 
 (def chip-foose-map
@@ -30,22 +32,28 @@
   [chip-foose-map chris-jacobs-map courtney-hansen-map])
 
 (defn health
-  [request]
+  []
   {:status  200
    :headers {"content-type" "text/plain"}
    :body    (str "OK" \newline)})
+
+(defn version
+  []
+  {:status  200
+   :headers {"content-type" "text/plain"}
+   :body    (str (str "HipsHttp " (version/get-version "io.xorshift" "hips-clj-http")) \newline)})
 
 (defn render-json
   [c]
   {:status  200
    :headers {"content-type" "application/json"}
-   :body    (json/generate-string c {:date-format "M/dd/yyyy" :pretty true})})
+   :body    (str (json/generate-string c {:date-format "M/dd/yyyy" :pretty true}) \newline)})
 
 (defn not-found
   []
   {:status  404
    :headers {"content-type" "text/plain"}
-   :body    "Not Found"})
+   :body    (str "Not Found" \newline)})
 
 (defn people-sorted-by-gender
   [ppl]
@@ -65,6 +73,8 @@
     (and (= method :get) (= uri "/records/gender")) (people-sorted-by-gender people)
     (and (= method :get) (= uri "/records/birthday")) (people-sorted-by-date-of-birth people)
     (and (= method :get) (= uri "/records/name")) (people-sorted-by-last-name people)
+    (and (= method :get) (= uri "/health")) (health)
+    (and (= method :get) (= uri "/version")) (version)
     :else (not-found)))
 
 (def reloadable-handler
