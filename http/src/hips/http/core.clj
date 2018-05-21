@@ -37,9 +37,7 @@
 (defn add-person
   [csv ppl]
   (swap! ppl conj (person/from-csv csv))
-  {:status  200
-   :headers {"content-type" "text/plain"}
-   :body    (str "OK" \newline (person/from-csv csv) \newline)})
+  {:status 204})
 
 (defn people-sorted-by-gender
   [ppl]
