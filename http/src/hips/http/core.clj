@@ -2,34 +2,13 @@
   (:require [hips.cli.person :as person]
             [ring.adapter.jetty :as jetty]
             [ring.middleware.reload :refer [wrap-reload]]
+            [ring.util.request :as req]
             [cheshire.core :as json]
             [trptcolin.versioneer.core :as version])
 
   (:gen-class))
 
-(def chip-foose-map
-  {:first-name     "Chip"
-   :last-name      "Foose"
-   :gender         "M"
-   :favorite-color "MetallicOrange"
-   :date-of-birth  (person/parse-date "2004-10-12")})
-
-(def chris-jacobs-map
-  {:first-name     "Chris"
-   :last-name      "Jacobs"
-   :gender         "M"
-   :favorite-color "Black"
-   :date-of-birth  (person/parse-date "2008-06-26")})
-
-(def courtney-hansen-map
-  {:first-name     "Courtney"
-   :last-name      "Hansen"
-   :gender         "F"
-   :favorite-color "Blue"
-   :date-of-birth  (person/parse-date "2005-03-17")})
-
-(def people
-  [chip-foose-map chris-jacobs-map courtney-hansen-map])
+(def people (atom []))
 
 (defn health
   []
@@ -55,6 +34,13 @@
    :headers {"content-type" "text/plain"}
    :body    (str "Not Found" \newline)})
 
+(defn add-person
+  [csv ppl]
+  (swap! ppl conj (person/from-csv csv))
+  {:status  200
+   :headers {"content-type" "text/plain"}
+   :body    (str "OK" \newline (person/from-csv csv) \newline)})
+
 (defn people-sorted-by-gender
   [ppl]
   (render-json (person/sort-by-gender ppl)))
@@ -68,18 +54,20 @@
   (render-json (person/sort-by-last-name ppl)))
 
 (defn handler
-  [{uri :uri method :request-method}]
-  (cond
-    (and (= method :get) (= uri "/records/gender")) (people-sorted-by-gender people)
-    (and (= method :get) (= uri "/records/birthday")) (people-sorted-by-date-of-birth people)
-    (and (= method :get) (= uri "/records/name")) (people-sorted-by-last-name people)
-    (and (= method :get) (= uri "/health")) (health)
-    (and (= method :get) (= uri "/version")) (version)
-    :else (not-found)))
+  [request]
+  (let [{:keys [request-method uri]} request]
+    (cond
+      (and (= request-method :post) (= uri "/records")) (add-person (req/body-string request) people)
+      (and (= request-method :get) (= uri "/records/gender")) (people-sorted-by-gender @people)
+      (and (= request-method :get) (= uri "/records/birthday")) (people-sorted-by-date-of-birth @people)
+      (and (= request-method :get) (= uri "/records/name")) (people-sorted-by-last-name @people)
+      (and (= request-method :get) (= uri "/health")) (health)
+      (and (= request-method :get) (= uri "/version")) (version)
+      :else (not-found))))
 
 (def reloadable-handler
   (wrap-reload #'handler))
 
 (defn -main
   [& args]
-  (jetty/run-jetty #'reloadable-handler {:port 3000}))
+  (jetty/run-jetty #'reloadable-handler {:port 8080}))
